@@ -1,0 +1,26 @@
+change directory cd\
+D:
+
+az configure
+
+az login
+
+type az
+
+create a storage account using az cli:
+az storage account create -n pracstore  -g prac-rg -l eastus --sku Standard_LRS
+
+create a container in storage account pracstore:
+az storage container create --name practice --account-name pracstore --auth-mode login
+
+upload a file to container :
+ az storage blob upload -file D:/azure/ADF_PROJECT_COVID/covid19/eurostat_data/population_by_age.tsv.gz --account-name pracstore -c practice -n population_by_age.tsv.gz --auth-mode login
+
+create azure datafactory
+az datafactory create --location "East US" --name "practicefactory" --resource-group "prac-rg"
+
+create a linked service
+az datafactory linked-service create --factory-name "practicefactory" --properties "{\"type\":\"AzureStorage\",\"typeProperties\":{\"connectionString\":{\"type\":\"SecureString\",\"value\":\"DefaultEndpointsProtocol=https;AccountName=practice;AccountKey=<storage key>\"}}}" --name "ls_blob_prac" --resource-group "prac-rg"
+
+create dataset
+az datafactory dataset create --properties "{\"type\":\"AzureBlob\",\"linkedServiceName\":{\"type\":\"LinkedServiceReference\",\"referenceName\":\"exampleLinkedService\"},\"parameters\":{\"MyFileName\":{\"type\":\"String\"},\"MyFolderPath\":{\"type\":\"String\"}},\"typeProperties\":{\"format\":{\"type\":\"TextFormat\"},\"fileName\":{\"type\":\"Expression\",\"value\":\"@dataset().MyFileName\"},\"folderPath\":{\"type\":\"Expression\",\"value\":\"@dataset().MyFolderPath\"}}}" --name "exampleDataset" --factory-name "exampleFactoryName" --resource-group "exampleResourceGroup"
