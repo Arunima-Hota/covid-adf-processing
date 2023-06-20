@@ -11,4 +11,4 @@ Covid data processing and reporting in ADF.
 - `sql_scripts` : After the data are processed in ADF, it has sql script to create underlying tables in azure sql database. This table will store all the processed data in a schematic way.
 
 # CI/ CD
-!(./images/adf-cicd-configuration.PNG)
+!(./images/adf-cicd-configuration.PNG?raw=true)
